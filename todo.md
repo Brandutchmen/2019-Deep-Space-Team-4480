@@ -1,12 +1,12 @@
-#Todo for Hud
-*Elevation
-*Vision (Front, Rear) - 360?
-*isCargoLoaded?
-*IR sensor on line?
-*Crosshair
+# Todo for Hud
+* Elevation
+* Vision (Front, Rear) - 360?
+* isCargoLoaded?
+* IR sensor on line?
+* Crosshair
 
-#Nice to have:
-*Live Scores
-*Auto AutonomousModeSelector
-*Ramp Deploy
-*Timer
+# Nice to have:
+* Live Scores
+* Auto AutonomousModeSelector
+* Ramp Deploy
+* Timer
