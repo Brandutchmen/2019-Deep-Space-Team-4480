@@ -53,6 +53,7 @@ class MyRobot(wpilib.IterativeRobot):
 
     def teleopInit(self):
         #self.navx.reset()
+        #This is a note
         pass
 
     def teleopPeriodic(self):
