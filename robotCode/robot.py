@@ -4,13 +4,24 @@ import wpilib
 from wpilib import drive
 import time
 import ctre
+import navx
+from networktables import NetworkTables
 
 from robotpy_ext.autonomous import AutonomousModeSelector
-from robotpy_ext.common_drivers import units, navx
+from robotpy_ext.common_drivers import units
+
+from components import drive
 
 class MyRobot(wpilib.IterativeRobot):
 
     def robotInit(self):
+
+        #NetworkTables Init
+        NetworkTables.initialize()
+        self.networkTable = NetworkTables.getTable("SmartDashboard")
+
+        #PowerDistributionPanel INIT
+        self.pdp = wpilib.PowerDistributionPanel()
 
         #Motor Init
         self.motor1 = ctre.WPI_TalonSRX(1)
@@ -45,12 +56,10 @@ class MyRobot(wpilib.IterativeRobot):
         pass
 
     def teleopPeriodic(self):
-
         if self.ultrasonic.getVoltage() < 4.9:
             print("Close Range - Object Detected")
         else:
             print("No Object")
-
 
         if self.playerOne.getAButton():
             self.autoAlign()
