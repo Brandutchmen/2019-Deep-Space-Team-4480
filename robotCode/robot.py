@@ -69,9 +69,9 @@ class MyRobot(wpilib.IterativeRobot):
     def teleopPeriodic(self):
 
         if self.sensors.closeRangeUltrasonicDetect():
-            print("Object")
+            self.color.printGreen("Object Detected")
         else:
-            print("None")
+            self.color.printRed("No object")
 
         self.drive.masterDrive(self.playerOne.getY(0), self.playerOne.getX(0))
 
