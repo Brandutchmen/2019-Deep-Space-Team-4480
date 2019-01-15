@@ -10,7 +10,7 @@ from networktables import NetworkTables
 from robotpy_ext.autonomous import AutonomousModeSelector
 from robotpy_ext.common_drivers import units
 
-from components import drive
+from components import drive, color, sensors
 
 class MyRobot(wpilib.IterativeRobot):
 
@@ -20,7 +20,7 @@ class MyRobot(wpilib.IterativeRobot):
         NetworkTables.initialize()
         self.networkTable = NetworkTables.getTable("SmartDashboard")
 
-        #PowerDistributionPanel INIT
+        #PowerDistributionPanel Init
         self.pdp = wpilib.PowerDistributionPanel()
 
         #Motor Init
@@ -29,9 +29,15 @@ class MyRobot(wpilib.IterativeRobot):
         self.motor3 = ctre.WPI_TalonSRX(3)
         self.motor4 = ctre.WPI_TalonSRX(4)
 
+        #SpeedControllerGroups Init
+        self.left = wpilib.SpeedControllerGroup(self.motor1, self.motor2)
+        self.right = wpilib.SpeedControllerGroup(self.motor3, self.motor4)
+
         #Sensor Init
         self.ultrasonic = wpilib.AnalogInput(0)
-        self.distanceSensor = navx.AHRS.create_i2c()
+
+        #Setting Drive
+        self.robotDrive = wpilib.RobotDrive(self.left, self.right)
 
         #Controller Init
         self.playerOne = wpilib.XboxController(0)
@@ -39,8 +45,14 @@ class MyRobot(wpilib.IterativeRobot):
         #Navx Init
         self.navx = navx.AHRS.create_spi()
 
-        #Setting Drive
-        self.robotDrive = wpilib.RobotDrive(self.motor1, self.motor2, self.motor3, self.motor4)
+        #Drive.py init
+        self.drive = drive.Drive(self.robotDrive, self.navx, self.left, self.right)
+
+        #Sensors.py init
+        self.sensors = sensors.Sensors(self.robotDrive, self.navx, self.left, self.right, self.ultrasonic)
+
+        #Color.py init
+        self.color = color.PrintColor()
 
     def disabledInit(self):
         pass
@@ -52,31 +64,16 @@ class MyRobot(wpilib.IterativeRobot):
         pass
 
     def teleopInit(self):
-        #self.navx.reset()
-        #This is a note
         pass
 
     def teleopPeriodic(self):
-        if self.ultrasonic.getVoltage() < 4.9:
-            print("Close Range - Object Detected")
-        else:
-            print("No Object")
 
-        if self.playerOne.getAButton():
-            self.autoAlign()
-        elif self.playerOne.getBButton():
-            self.navx.reset()
+        if self.sensors.closeRangeUltrasonicDetect():
+            print("Object")
         else:
-            self.robotDrive.arcadeDrive(-self.playerOne.getY(0), self.playerOne.getX(0))
+            print("None")
 
-    def autoAlign(self):
-        speed = 0.5
-        if self.navx.getYaw() > 0 and not self.navx.getYaw() < -170 or self.navx.getYaw() > 170:
-            self.robotDrive.arcadeDrive(-self.playerOne.getY(0), speed)
-        elif self.navx.getYaw() < 0 and not self.navx.getYaw() < -170 or self.navx.getYaw() > 170:
-            self.robotDrive.arcadeDrive(-self.playerOne.getY(0), -speed)
-        elif self.navx.getYaw() < -170 or self.navx.getYaw() > 170:
-            self.robotDrive.arcadeDrive(-self.playerOne.getY(0), 0)
+        self.drive.masterDrive(self.playerOne.getY(0), self.playerOne.getX(0))
 
 if __name__ == "__main__":
     wpilib.run(MyRobot)
