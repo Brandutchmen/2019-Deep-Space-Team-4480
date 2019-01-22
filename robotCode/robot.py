@@ -43,7 +43,8 @@ class MyRobot(wpilib.IterativeRobot):
         self.playerOne = wpilib.XboxController(0)
 
         #Navx Init
-        self.navx = navx.AHRS.create_spi()
+        #self.navx = navx.AHRS.create_spi()
+        self.navx = "placeholder"
 
         #Drive.py init
         self.drive = drive.Drive(self.robotDrive, self.navx, self.left, self.right)
