@@ -6,13 +6,16 @@ import math
 
 class Drive(object):
 
-    def __init__(self, robotDrive, navx, leftMotorGroup, rightMotorGroup):
+    def __init__(self, robotDrive, navx, leftMotorGroup, rightMotorGroup, sensors, color):
 
         self.left = leftMotorGroup
         self.right = rightMotorGroup
 
         self.robotDrive = robotDrive
         self.gyro = navx
+
+        self.sensors = sensors
+        self.color = color
 
     def boundHalfDegrees(self, angle_degrees):
         while angle_degrees >= 180.0:
@@ -32,11 +35,37 @@ class Drive(object):
         #####   MASTER DRIVE FUNCTION   #####
         #####################################
 
-    def masterDrive(self, posX, posY):
-
+    def masterDrive(self, posX, posY, enable=True):
+        if enable == False:
+            pass
+        else:
             self.robotDrive.arcadeDrive(-posX, posY)
         #####################################
-            '''
+
+        #####################################
+        #####    TAPE DRIVE FUNCTION    #####
+        #####################################
+
+    def tapeDrive(self, posX, posY):
+        adjustmentSpeed = posY + 0.35
+        majorAdjustmentSpeed = posY + 0.5
+
+        if self.sensors.seekTape() == 0 or self.sensors.seekTape() == 5:
+            self.masterDrive(posX, posY)
+        elif self.sensors.seekTape() == 1:
+            # Tape is slightly to the left of target
+            self.masterDrive(posX, posY+adjustmentSpeed)
+        elif self.sensors.seekTape() == 2:
+            # Tape is slightly to the right of target
+            self.masterDrive(posX, posY-adjustmentSpeed)
+        elif self.sensors.seekTape() == 3:
+            # Tape is way to the left of target
+            self.masterDrive(posX, posY+majorAdjustmentSpeed)
+        elif self.sensors.seekTape() == 4:
+            # Tape is way to the right of target
+            self.masterDrive(posX, posY-majorAdjustmentSpeed)
+
+        '''
 
         #self.navx.reset()
 

@@ -4,6 +4,7 @@ import wpilib
 from wpilib import drive
 import time
 import ctre
+import hal
 import navx
 from networktables import NetworkTables
 
@@ -35,6 +36,10 @@ class MyRobot(wpilib.IterativeRobot):
 
         #Sensor Init
         self.ultrasonic = wpilib.AnalogInput(0)
+        self.outerLeftIR = wpilib.DigitalInput(0)
+        self.leftIR = wpilib.DigitalInput(1)
+        self.rightIR = wpilib.DigitalInput(2)
+        self.outerRightIR = wpilib.DigitalInput(3)
 
         #Setting Drive
         self.robotDrive = wpilib.RobotDrive(self.left, self.right)
@@ -46,35 +51,34 @@ class MyRobot(wpilib.IterativeRobot):
         #self.navx = navx.AHRS.create_spi()
         self.navx = "placeholder"
 
-        #Drive.py init
-        self.drive = drive.Drive(self.robotDrive, self.navx, self.left, self.right)
-
         #Sensors.py init
-        self.sensors = sensors.Sensors(self.robotDrive, self.navx, self.left, self.right, self.ultrasonic)
+        self.sensors = sensors.Sensors(self.robotDrive, self.navx, self.left, self.right, self.ultrasonic, self.outerLeftIR, self.leftIR, self.rightIR, self.outerRightIR)
 
         #Color.py init
         self.color = color.PrintColor()
 
+        #Drive.py init
+        self.drive = drive.Drive(self.robotDrive, self.navx, self.left, self.right, self.sensors, self.color)
+
     def disabledInit(self):
-        pass
+        self.networkTable.putString('status', "Disabled")
 
     def autonomousInit(self):
         pass
 
     def autonomousPeriodic(self):
-        pass
+        self.networkTable.putString('status', "Autonomous")
 
     def teleopInit(self):
         pass
 
     def teleopPeriodic(self):
+        self.networkTable.putString('status', "Teleop")
 
-        if self.sensors.closeRangeUltrasonicDetect():
-            self.color.printGreen("Object Detected")
+        if self.playerOne.getAButton():
+            self.drive.tapeDrive(self.playerOne.getY(0), self.playerOne.getX(0))
         else:
-            self.color.printRed("No object")
-
-        self.drive.masterDrive(self.playerOne.getY(0), self.playerOne.getX(0))
+            self.drive.masterDrive(self.playerOne.getY(0), self.playerOne.getX(0), True)
 
 if __name__ == "__main__":
     wpilib.run(MyRobot)
