@@ -1,0 +1,47 @@
+#throttle {
+  margin: 20px;
+  width: 200px;
+  height: 200px;
+  position: relative;
+}
+#rotation {
+  margin: 20px;
+  width: 200px;
+  height: 200px;
+  position: relative;
+}
+
+
+.ini {
+    -webkit-column-count: 3; /* Chrome, Safari, Opera */
+    -moz-column-count: 3; /* Firefox */
+    column-count: 3;
+}
+
+    .progress {
+      height: 100px;
+      margin: 20px;
+      width: 100px;
+      position: relative;
+    }
+    .progress > svg {
+        height: 100%;
+        display: block;
+    }
+
+    .btn {
+        background-color: DodgerBlue;
+        border: none;
+        color: white;
+        padding: 12px 30px;
+        cursor: pointer;
+        font-size: 20px;
+    }
+    /* Darker background on mouse-over */
+    .btn:hover {
+        background-color: Green;
+    }
+    body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
+    body {font-size:16px;}
+    .w3-half img{margin-bottom:-6px;margin-top:16px;opacity:0.8;cursor:pointer}
+    .w3-half img:hover{opacity:1}

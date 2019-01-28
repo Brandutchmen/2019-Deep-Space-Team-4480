@@ -48,8 +48,7 @@ class MyRobot(wpilib.IterativeRobot):
         self.playerOne = wpilib.XboxController(0)
 
         #Navx Init
-        #self.navx = navx.AHRS.create_spi()
-        self.navx = "placeholder"
+        self.navx = navx.AHRS.create_spi()
 
         #Sensors.py init
         self.sensors = sensors.Sensors(self.robotDrive, self.navx, self.left, self.right, self.ultrasonic, self.outerLeftIR, self.leftIR, self.rightIR, self.outerRightIR)
@@ -74,7 +73,7 @@ class MyRobot(wpilib.IterativeRobot):
 
     def teleopPeriodic(self):
         self.networkTable.putString('status', "Teleop")
-
+        print(self.navx.getYaw())
         if self.playerOne.getAButton():
             self.drive.tapeDrive(self.playerOne.getY(0), self.playerOne.getX(0))
         else:
