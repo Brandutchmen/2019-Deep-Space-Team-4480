@@ -24,6 +24,8 @@ SENSOR KEY:
   - - - - - -
 
 '''
+class SensorState:
+    OnTarget, SlightLeft, SlightRight, WayLeft, WayRight, Nothing = range(0, 6)
 
 class Sensors(object):
 
@@ -39,22 +41,22 @@ class Sensors(object):
     def seekTape(self):
 
         if self.leftIR.get() and self.rightIR.get():
-            return 0
+            return SensorState.OnTarget
             #print("Tape is on target")
         elif self.leftIR.get():
-            return 1
+            return SensorState.SlightLeft
             #print("Tape is slightly to the left of target")
         elif self.rightIR.get():
-            return 2
+            return SensorState.SlightRight
             #print("Tape is slightly to the right of target")
         elif self.outerLeftIR.get():
-            return 3
+            return SensorState.WayLeft
             #print("Tape is way to the left")
         elif self.outerRightIR.get():
-            return 4
+            return SensorState.WayRight
             #print("Tape is way to the right")
         else:
-            return 5
+            return SensorState.Nothing
             #print("Nothing")
 
     def closeRangeUltrasonicDetect(self):
