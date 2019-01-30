@@ -3,6 +3,7 @@
 
 import wpilib
 import math
+import sensors
 
 class Drive(object):
 
@@ -50,18 +51,18 @@ class Drive(object):
         adjustmentSpeed = posY + 0.35
         majorAdjustmentSpeed = posY + 0.5
 
-        if self.sensors.seekTape() == 0 or self.sensors.seekTape() == 5:
+        if self.sensors.seekTape() == SensorState.OnTarget or self.sensors.seekTape() == SensorState.Nothing:
             self.masterDrive(posX, posY)
-        elif self.sensors.seekTape() == 1:
+        elif self.sensors.seekTape() == SensorState.SlightLeft:
             # Tape is slightly to the left of target
             self.masterDrive(posX, posY+adjustmentSpeed)
-        elif self.sensors.seekTape() == 2:
+        elif self.sensors.seekTape() == SensorState.SlightRight:
             # Tape is slightly to the right of target
             self.masterDrive(posX, posY-adjustmentSpeed)
-        elif self.sensors.seekTape() == 3:
+        elif self.sensors.seekTape() == SensorState.WayLeft:
             # Tape is way to the left of target
             self.masterDrive(posX, posY+majorAdjustmentSpeed)
-        elif self.sensors.seekTape() == 4:
+        elif self.sensors.seekTape() == SensorState.WayRight:
             # Tape is way to the right of target
             self.masterDrive(posX, posY-majorAdjustmentSpeed)
 
