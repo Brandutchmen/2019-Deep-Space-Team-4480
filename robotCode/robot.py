@@ -60,7 +60,7 @@ class MyRobot(wpilib.IterativeRobot):
         self.color = color.PrintColor()
 
         #Drive.py init
-        self.drive = drive.Drive(self.robotDrive, self.navx, self.left, self.right, self.sensors, self.color, self.SensorState)
+        self.drive = drive.Drive(self.robotDrive, self.navx, self.left, self.right, self.sensors, self.color)
 
     def disabledInit(self):
         self.networkTable.putString('status', "Disabled")

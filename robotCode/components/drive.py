@@ -3,7 +3,7 @@
 
 import wpilib
 import math
-from sensors import SensorState
+from components.sensors import SensorState
 
 class Drive(object):
 
