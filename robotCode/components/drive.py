@@ -3,11 +3,11 @@
 
 import wpilib
 import math
-from components import sensors
+from sensors import SensorState
 
 class Drive(object):
 
-    def __init__(self, robotDrive, navx, leftMotorGroup, rightMotorGroup, sensors, color, SensorState):
+    def __init__(self, robotDrive, navx, leftMotorGroup, rightMotorGroup, sensors, color):
 
         self.left = leftMotorGroup
         self.right = rightMotorGroup
@@ -17,7 +17,6 @@ class Drive(object):
 
         self.sensors = sensors
         self.color = color
-        self.SensorState = SensorState
 
     def boundHalfDegrees(self, angle_degrees):
         while angle_degrees >= 180.0:
@@ -52,18 +51,18 @@ class Drive(object):
         adjustmentSpeed = posY + 0.35
         majorAdjustmentSpeed = posY + 0.5
 
-        if self.sensors.seekTape() == self.SensorState.OnTarget or self.sensors.seekTape() == self.SensorState.Nothing:
+        if self.sensors.seekTape() == SensorState.OnTarget or self.sensors.seekTape() == SensorState.Nothing:
             self.masterDrive(posX, posY)
-        elif self.sensors.seekTape() == self.SensorState.SlightLeft:
+        elif self.sensors.seekTape() == SensorState.SlightLeft:
             # Tape is slightly to the left of target
             self.masterDrive(posX, posY+adjustmentSpeed)
-        elif self.sensors.seekTape() == self.SensorState.SlightRight:
+        elif self.sensors.seekTape() == SensorState.SlightRight:
             # Tape is slightly to the right of target
             self.masterDrive(posX, posY-adjustmentSpeed)
-        elif self.sensors.seekTape() == self.SensorState.WayLeft:
+        elif self.sensors.seekTape() == SensorState.WayLeft:
             # Tape is way to the left of target
             self.masterDrive(posX, posY+majorAdjustmentSpeed)
-        elif self.sensors.seekTape() == self.SensorState.WayRight:
+        elif self.sensors.seekTape() == SensorState.WayRight:
             # Tape is way to the right of target
             self.masterDrive(posX, posY-majorAdjustmentSpeed)
 
