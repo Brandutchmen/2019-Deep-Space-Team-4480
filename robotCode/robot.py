@@ -53,11 +53,14 @@ class MyRobot(wpilib.IterativeRobot):
         #Sensors.py init
         self.sensors = sensors.Sensors(self.robotDrive, self.navx, self.left, self.right, self.ultrasonic, self.outerLeftIR, self.leftIR, self.rightIR, self.outerRightIR)
 
+        #SensorState init
+        self.SensorState = sensors.SensorState()
+
         #Color.py init
         self.color = color.PrintColor()
 
         #Drive.py init
-        self.drive = drive.Drive(self.robotDrive, self.navx, self.left, self.right, self.sensors, self.color)
+        self.drive = drive.Drive(self.robotDrive, self.navx, self.left, self.right, self.sensors, self.color, self.SensorState)
 
     def disabledInit(self):
         self.networkTable.putString('status', "Disabled")
@@ -73,7 +76,7 @@ class MyRobot(wpilib.IterativeRobot):
 
     def teleopPeriodic(self):
         self.networkTable.putString('status', "Teleop")
-        print(self.navx.getYaw())
+        #print(self.navx.getYaw())
         if self.playerOne.getAButton():
             self.drive.tapeDrive(self.playerOne.getY(0), self.playerOne.getX(0))
         else:

@@ -24,7 +24,7 @@ SENSOR KEY:
   - - - - - -
 
 '''
-class SensorState:
+class SensorState(object):
     OnTarget, SlightLeft, SlightRight, WayLeft, WayRight, Nothing = range(0, 6)
 
 class Sensors(object):
