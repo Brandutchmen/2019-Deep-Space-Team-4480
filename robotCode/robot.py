@@ -5,7 +5,7 @@ from wpilib import drive
 import time
 import ctre
 import hal
-import navx
+#import navx
 from networktables import NetworkTables
 
 from robotpy_ext.autonomous import AutonomousModeSelector
@@ -48,8 +48,8 @@ class MyRobot(wpilib.IterativeRobot):
         self.playerOne = wpilib.XboxController(0)
 
         #Navx Init
-        self.navx = navx.AHRS.create_spi()
-
+        #self.navx = navx.AHRS.create_spi()
+        self.navx = "Placeholder"
         #Sensors.py init
         self.sensors = sensors.Sensors(self.robotDrive, self.navx, self.left, self.right, self.ultrasonic, self.outerLeftIR, self.leftIR, self.rightIR, self.outerRightIR)
 

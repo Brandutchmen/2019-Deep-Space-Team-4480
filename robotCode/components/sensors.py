@@ -40,24 +40,24 @@ class Sensors(object):
 
     def seekTape(self):
 
-        if self.leftIR.get() and self.rightIR.get():
+        if self.leftIR.get() == False and self.rightIR.get() == False:
+            print("Tape is on target")
             return SensorState.OnTarget
-            #print("Tape is on target")
-        elif self.leftIR.get():
+        elif not self.leftIR.get():
+            print("Tape is slightly to the left of target")
             return SensorState.SlightLeft
-            #print("Tape is slightly to the left of target")
-        elif self.rightIR.get():
+        elif not self.rightIR.get():
+            print("Tape is slightly to the right of target")
             return SensorState.SlightRight
-            #print("Tape is slightly to the right of target")
-        elif self.outerLeftIR.get():
+        elif not self.outerLeftIR.get():
+            print("Tape is way to the left")
             return SensorState.WayLeft
-            #print("Tape is way to the left")
-        elif self.outerRightIR.get():
+        elif not self.outerRightIR.get():
+            print("Tape is way to the right")
             return SensorState.WayRight
-            #print("Tape is way to the right")
         else:
+            print("Nothing")
             return SensorState.Nothing
-            #print("Nothing")
 
     def closeRangeUltrasonicDetect(self):
         if self.closeRangeUltrasonic.getVoltage() < 4.9:

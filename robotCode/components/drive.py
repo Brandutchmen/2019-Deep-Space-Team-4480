@@ -48,8 +48,8 @@ class Drive(object):
         #####################################
 
     def tapeDrive(self, posX, posY):
-        adjustmentSpeed = posY + 0.35
-        majorAdjustmentSpeed = posY + 0.5
+        adjustmentSpeed = posY + 0.5
+        majorAdjustmentSpeed = posY + 0.6
 
         if self.sensors.seekTape() == SensorState.OnTarget or self.sensors.seekTape() == SensorState.Nothing:
             self.masterDrive(posX, posY)
