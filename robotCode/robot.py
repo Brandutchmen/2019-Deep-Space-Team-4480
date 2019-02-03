@@ -25,20 +25,25 @@ class MyRobot(wpilib.IterativeRobot):
         #PowerDistributionPanel Init
         self.pdp = wpilib.PowerDistributionPanel()
 
-        #Motor Init
+        #Drive Motor Init
         self.motor1 = ctre.WPI_TalonSRX(1)
         self.motor2 = ctre.WPI_TalonSRX(2)
         self.motor3 = ctre.WPI_TalonSRX(3)
         self.motor4 = ctre.WPI_TalonSRX(4)
 
-        #Spark Max init
-        self.brushless1 = rev.CANSparkMax(5, rev.MotorType.kBrushless)
-        self.brushless2 = rev.CANSparkMax(6, rev.MotorType.kBrushless)
+        #Spark Max Init
+        if not wpilib.RobotBase.isSimulation():
+            self.brushless1 = rev.CANSparkMax(5, rev.MotorType.kBrushless)
+            self.brushless2 = rev.CANSparkMax(6, rev.MotorType.kBrushless)
+        else:
+           self.brushless1 = ctre.WPI_TalonSRX(5)
+           self.brushless2 = ctre.WPI_TalonSRX(6)
 
-        #Intake Motor
+
+        #Intake Motor Init
         self.intake = ctre.WPI_TalonSRX(7)
 
-        #Ramp Motor
+        #Ramp Motor Init
         self.ramp = ctre.WPI_TalonSRX(8)
 
         #SpeedControllerGroups Init
@@ -62,16 +67,17 @@ class MyRobot(wpilib.IterativeRobot):
         #Navx Init
         #self.navx = navx.AHRS.create_spi()
         self.navx = "Placeholder"
-        #Sensors.py init
+
+        #Sensors.py Init
         self.sensors = sensors.Sensors(self.robotDrive, self.navx, self.left, self.right, self.ultrasonic, self.outerLeftIR, self.leftIR, self.rightIR, self.outerRightIR)
 
-        #SensorState init
+        #SensorState Init
         self.SensorState = sensors.SensorState()
 
-        #Color.py init
+        #Color.py Init
         self.color = color.PrintColor()
 
-        #Drive.py init
+        #Drive.py Init
         self.drive = drive.Drive(self.robotDrive, self.navx, self.left, self.right, self.sensors, self.color)
 
     def disabledInit(self):
