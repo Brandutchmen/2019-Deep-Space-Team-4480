@@ -5,6 +5,7 @@ from wpilib import drive
 import time
 import ctre
 import hal
+import rev
 #import navx
 from networktables import NetworkTables
 
@@ -30,9 +31,20 @@ class MyRobot(wpilib.IterativeRobot):
         self.motor3 = ctre.WPI_TalonSRX(3)
         self.motor4 = ctre.WPI_TalonSRX(4)
 
+        #Spark Max init
+        self.brushless1 = rev.CANSparkMax(5, rev.MotorType.kBrushless)
+        self.brushless2 = rev.CANSparkMax(6, rev.MotorType.kBrushless)
+
+        #Intake Motor
+        self.intake = ctre.WPI_TalonSRX(7)
+
+        #Ramp Motor
+        self.ramp = ctre.WPI_TalonSRX(8)
+
         #SpeedControllerGroups Init
         self.left = wpilib.SpeedControllerGroup(self.motor1, self.motor2)
         self.right = wpilib.SpeedControllerGroup(self.motor3, self.motor4)
+        self.lift = wpilib.SpeedControllerGroup(self.brushless1, self.brushless2)
 
         #Sensor Init
         self.ultrasonic = wpilib.AnalogInput(0)
@@ -76,11 +88,18 @@ class MyRobot(wpilib.IterativeRobot):
 
     def teleopPeriodic(self):
         self.networkTable.putString('status', "Teleop")
-        #print(self.navx.getYaw())
+
         if self.playerOne.getAButton():
             self.drive.tapeDrive(self.playerOne.getY(0), self.playerOne.getX(0))
         else:
             self.drive.masterDrive(self.playerOne.getY(0), self.playerOne.getX(0), True)
+
+        if self.playerOne.getBButton():
+            self.lift.set(self.playerOne.getTriggerAxis(1) + self.playerOne.getTriggerAxis(0) * -1)
+        elif self.playerOne.getYButton():
+            self.intake.set(self.playerOne.getTriggerAxis(1) + self.playerOne.getTriggerAxis(0) * -1)
+        elif self.playerOne.getXButton():
+            self.ramp.set(self.playerOne.getTriggerAxis(1) + self.playerOne.getTriggerAxis(0) * -1)
 
 if __name__ == "__main__":
     wpilib.run(MyRobot)
