@@ -96,9 +96,9 @@ class MyRobot(wpilib.IterativeRobot):
         self.networkTable.putString('status', "Teleop")
 
         if self.playerOne.getAButton():
-            self.drive.tapeDrive(self.playerOne.getY(0), self.playerOne.getX(0))
+            self.drive.tapeDrive(-self.playerOne.getX(0), self.playerOne.getY(0))
         else:
-            self.drive.masterDrive(self.playerOne.getY(0), self.playerOne.getX(0), True)
+            self.drive.masterDrive(-self.playerOne.getX(0), self.playerOne.getY(0), True)
 
         if self.playerOne.getBButton():
             self.lift.set(self.playerOne.getTriggerAxis(1) + self.playerOne.getTriggerAxis(0) * -1)

@@ -55,16 +55,16 @@ class Drive(object):
             self.masterDrive(posX, posY)
         elif self.sensors.seekTape() == SensorState.SlightLeft:
             # Tape is slightly to the left of target
-            self.masterDrive(posX, posY+adjustmentSpeed)
+            self.masterDrive(posX+adjustmentSpeed, posY)
         elif self.sensors.seekTape() == SensorState.SlightRight:
             # Tape is slightly to the right of target
-            self.masterDrive(posX, posY-adjustmentSpeed)
+            self.masterDrive(posX-adjustmentSpeed, posY)
         elif self.sensors.seekTape() == SensorState.WayLeft:
             # Tape is way to the left of target
-            self.masterDrive(posX, posY+majorAdjustmentSpeed)
+            self.masterDrive(posX+majorAdjustmentSpeed, posY)
         elif self.sensors.seekTape() == SensorState.WayRight:
             # Tape is way to the right of target
-            self.masterDrive(posX, posY-majorAdjustmentSpeed)
+            self.masterDrive(posX-majorAdjustmentSpeed, posY)
 
         '''
 
