@@ -98,16 +98,25 @@ class MyRobot(wpilib.IterativeRobot):
         self.networkTable.putString('status', "Teleop")
 
         if self.playerOne.getAButton():
+            self.lift.set(0.17322)
+        else:
+            self.lift.set(self.playerOne.getTriggerAxis(1) + self.playerOne.getTriggerAxis(0) * -1)
+
+        self.intake.set(self.playerOne.getBumper(1) + self.playerOne.getBumper(0) * -1)
+
+
+
+        if self.playerOne.getBButton():
             self.drive.tapeDrive(-self.playerOne.getX(0), self.playerOne.getY(0))
         else:
             self.drive.masterDrive(-self.playerOne.getX(0), self.playerOne.getY(0), True)
 
-        if self.playerOne.getBButton():
-            self.lift.set(self.playerOne.getTriggerAxis(1) + self.playerOne.getTriggerAxis(0) * -1)
+
+            '''
         elif self.playerOne.getYButton():
             self.intake.set(self.playerOne.getTriggerAxis(1) + self.playerOne.getTriggerAxis(0) * -1)
         elif self.playerOne.getXButton():
             self.ramp.set(self.playerOne.getTriggerAxis(1) + self.playerOne.getTriggerAxis(0) * -1)
-
+        '''
 if __name__ == "__main__":
     wpilib.run(MyRobot)
