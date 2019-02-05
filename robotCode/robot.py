@@ -17,6 +17,8 @@ from components import drive, color, sensors
 class MyRobot(wpilib.IterativeRobot):
 
     def robotInit(self):
+        #Onboard Webcam Init
+        wpilib.CameraServer.launch()
 
         #NetworkTables Init
         NetworkTables.initialize()
