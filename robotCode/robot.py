@@ -100,7 +100,7 @@ class MyRobot(wpilib.IterativeRobot):
         if self.playerOne.getAButton():
             self.lift.set(0.17322)
         else:
-            self.lift.set(self.playerOne.getTriggerAxis(1) + self.playerOne.getTriggerAxis(0) * -1)
+            self.lift.set((self.playerOne.getTriggerAxis(1) + self.playerOne.getTriggerAxis(0) * -1)*0.3)
 
         self.intake.set(self.playerOne.getBumper(1) + self.playerOne.getBumper(0) * -1)
 
