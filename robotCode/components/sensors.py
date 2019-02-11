@@ -29,9 +29,8 @@ class SensorState(object):
 
 class Sensors(object):
 
-    def __init__(self, robotDrive, navx, leftMotorGroup, rightMotorGroup, closeRangeUltrasonic, outerLeftIR, leftIR, rightIR, outerRightIR):
+    def __init__(self, robotDrive, navx, leftMotorGroup, rightMotorGroup, outerLeftIR, leftIR, rightIR, outerRightIR):
 
-        self.closeRangeUltrasonic = closeRangeUltrasonic
         self.outerLeftIR = outerLeftIR
         self.leftIR = leftIR
         self.rightIR = rightIR
@@ -52,9 +51,3 @@ class Sensors(object):
             return SensorState.WayRight
         else:
             return SensorState.Nothing
-
-    def closeRangeUltrasonicDetect(self):
-        if self.closeRangeUltrasonic.getVoltage() < 4.9:
-            return(True) # Object Detected
-        else:
-            return(False) # No Object

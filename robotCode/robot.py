@@ -12,7 +12,7 @@ from networktables import NetworkTables
 from robotpy_ext.autonomous import AutonomousModeSelector
 from robotpy_ext.common_drivers import units
 
-from components import drive, color, sensors
+from components import drive, color, sensors, intake
 
 class MyRobot(wpilib.IterativeRobot):
 
@@ -43,7 +43,7 @@ class MyRobot(wpilib.IterativeRobot):
 
 
         #Intake Motor Init
-        self.intake = ctre.WPI_TalonSRX(7)
+        self.intakeMotors = ctre.WPI_TalonSRX(7)
 
         #Ramp Motor Init
         self.ramp = ctre.WPI_TalonSRX(8)
@@ -53,15 +53,15 @@ class MyRobot(wpilib.IterativeRobot):
         self.right = wpilib.SpeedControllerGroup(self.motor3, self.motor4)
         self.lift = wpilib.SpeedControllerGroup(self.brushless1, self.brushless2)
 
-        #Sensor Init
-        self.ultrasonic = wpilib.AnalogInput(0)
+        #Ir Init
+        self.intakeSensor = wpilib.DigitalInput(9)
         self.outerLeftIR = wpilib.DigitalInput(0)
         self.leftIR = wpilib.DigitalInput(1)
         self.rightIR = wpilib.DigitalInput(2)
         self.outerRightIR = wpilib.DigitalInput(3)
 
         #Setting Drive
-        self.robotDrive = wpilib.RobotDrive(self.left, self.right)
+        self.robotDrive = wpilib.drive.DifferentialDrive(self.left, self.right)
 
         #Controller Init
         self.playerOne = wpilib.XboxController(0)
@@ -71,7 +71,7 @@ class MyRobot(wpilib.IterativeRobot):
         self.navx = "Placeholder"
 
         #Sensors.py Init
-        self.sensors = sensors.Sensors(self.robotDrive, self.navx, self.left, self.right, self.ultrasonic, self.outerLeftIR, self.leftIR, self.rightIR, self.outerRightIR)
+        self.sensors = sensors.Sensors(self.robotDrive, self.navx, self.left, self.right, self.outerLeftIR, self.leftIR, self.rightIR, self.outerRightIR)
 
         #SensorState Init
         self.SensorState = sensors.SensorState()
@@ -81,6 +81,9 @@ class MyRobot(wpilib.IterativeRobot):
 
         #Drive.py Init
         self.drive = drive.Drive(self.robotDrive, self.navx, self.left, self.right, self.sensors, self.color)
+
+        #Intake.py Init
+        self.intake = intake.Intake(self.robotDrive, self.playerOne, self.intakeMotors, self.lift, self.intakeSensor)
 
     def disabledInit(self):
         self.networkTable.putString('status', "Disabled")
@@ -97,22 +100,27 @@ class MyRobot(wpilib.IterativeRobot):
     def teleopPeriodic(self):
         self.networkTable.putString('status', "Teleop")
 
+        '''
         if self.playerOne.getAButton():
             self.lift.set(0.17322)
         else:
             self.lift.set((self.playerOne.getTriggerAxis(1) + self.playerOne.getTriggerAxis(0) * -1)*0.3)
 
-        self.intake.set(self.playerOne.getBumper(1) + self.playerOne.getBumper(0) * -1)
-
-
 
         if self.playerOne.getBButton():
             self.drive.tapeDrive(-self.playerOne.getX(0), self.playerOne.getY(0))
         else:
-            self.drive.masterDrive(-self.playerOne.getX(0), self.playerOne.getY(0), True)
+        '''
 
+        if self.playerOne.getAButton():
+            self.intake.intakeIn(0, (self.playerOne.getTriggerAxis(1) + self.playerOne.getTriggerAxis(0) * -1)*0.3)
+        else:
+            self.lift.set(self.playerOne.getY(1)*0.3)
+            self.intakeMotors.set((self.playerOne.getTriggerAxis(1) + self.playerOne.getTriggerAxis(0) * -1))
 
-            '''
+        self.drive.masterDrive(-self.playerOne.getX(0), -self.playerOne.getY(0), True)
+
+        '''
         elif self.playerOne.getYButton():
             self.intake.set(self.playerOne.getTriggerAxis(1) + self.playerOne.getTriggerAxis(0) * -1)
         elif self.playerOne.getXButton():
