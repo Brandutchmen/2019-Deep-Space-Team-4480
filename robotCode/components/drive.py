@@ -40,7 +40,7 @@ class Drive(object):
         if enable == False:
             pass
         else:
-            self.robotDrive.arcadeDrive(-posX, posY)
+            self.robotDrive.arcadeDrive(posX, posY)
         #####################################
 
         #####################################

@@ -18,10 +18,9 @@ class Intake(object):
         return self.intakeSensor.get()
 
     def intakeIn(self, accel, liftVar):
-
         if self.intakeSensor.get() == True:
             self.lift.set(-0.23 + liftVar)
-            self.intakeMotors.set(0.5 + accel)
+            self.intakeMotors.set(0.65 + accel)
         elif self.intakeSensor.get() == False:
             self.lift.set(0)
             self.intakeMotors.set(0)

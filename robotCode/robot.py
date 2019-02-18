@@ -6,17 +6,19 @@ import time
 import ctre
 import hal
 import rev
-#import navx
 from networktables import NetworkTables
-
+from wpilib.shuffleboard import Shuffleboard
 from robotpy_ext.autonomous import AutonomousModeSelector
 from robotpy_ext.common_drivers import units
-
 from components import drive, color, sensors, intake
 
 class MyRobot(wpilib.IterativeRobot):
 
     def robotInit(self):
+        #Watchdog
+        #self.watchdog = wpilib.Watchdog
+        #self.watchdog.enable(self)
+
         #Onboard Webcam Init
         wpilib.CameraServer.launch()
 
@@ -85,6 +87,13 @@ class MyRobot(wpilib.IterativeRobot):
         #Intake.py Init
         self.intake = intake.Intake(self.robotDrive, self.playerOne, self.intakeMotors, self.lift, self.intakeSensor)
 
+        '''
+        # Add the elevator motor and potentiometer to an 'Elevator' tab
+        elevatorTab = Shuffleboard.getTab("Elevator")
+        elevatorTab.add(title="Motor", value=0.4)
+        elevatorTab.add(title="Potentiometer", value=0.3)
+        '''
+
     def disabledInit(self):
         self.networkTable.putString('status', "Disabled")
 
@@ -115,16 +124,29 @@ class MyRobot(wpilib.IterativeRobot):
         if self.playerOne.getAButton():
             self.intake.intakeIn(0, (self.playerOne.getTriggerAxis(1) + self.playerOne.getTriggerAxis(0) * -1)*0.3)
         else:
-            self.lift.set(self.playerOne.getY(1)*0.3)
+            self.lift.set(self.playerOne.getY(1)*-0.3)
             self.intakeMotors.set((self.playerOne.getTriggerAxis(1) + self.playerOne.getTriggerAxis(0) * -1))
 
-        self.drive.masterDrive(-self.playerOne.getX(0), -self.playerOne.getY(0), True)
+        '''
+        if self.playerOne.getXButtonPressed():
+            self.lift.set(-0.19)
+        elif self.playerOne.getXButtonReleased():
+            self.lift.set(-0.15)
+        '''
+
+        if self.playerOne.getXButton():
+            self.ramp.set(1)
+        elif self.playerOne.getYButton():
+            self.ramp.set(-1)
+        else:
+            self.ramp.set(0)
+
+        self.drive.masterDrive(self.playerOne.getX(0), -self.playerOne.getY(0))
+
 
         '''
         elif self.playerOne.getYButton():
             self.intake.set(self.playerOne.getTriggerAxis(1) + self.playerOne.getTriggerAxis(0) * -1)
-        elif self.playerOne.getXButton():
-            self.ramp.set(self.playerOne.getTriggerAxis(1) + self.playerOne.getTriggerAxis(0) * -1)
         '''
 if __name__ == "__main__":
     wpilib.run(MyRobot)
