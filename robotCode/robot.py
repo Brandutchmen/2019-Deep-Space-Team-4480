@@ -127,13 +127,6 @@ class MyRobot(wpilib.IterativeRobot):
             self.lift.set(self.playerOne.getY(1)*-0.3)
             self.intakeMotors.set((self.playerOne.getTriggerAxis(1) + self.playerOne.getTriggerAxis(0) * -1))
 
-        '''
-        if self.playerOne.getXButtonPressed():
-            self.lift.set(-0.19)
-        elif self.playerOne.getXButtonReleased():
-            self.lift.set(-0.15)
-        '''
-
         if self.playerOne.getXButton():
             self.ramp.set(1)
         elif self.playerOne.getYButton():
@@ -141,12 +134,9 @@ class MyRobot(wpilib.IterativeRobot):
         else:
             self.ramp.set(0)
 
+
+
         self.drive.masterDrive(self.playerOne.getX(0), -self.playerOne.getY(0))
 
-
-        '''
-        elif self.playerOne.getYButton():
-            self.intake.set(self.playerOne.getTriggerAxis(1) + self.playerOne.getTriggerAxis(0) * -1)
-        '''
 if __name__ == "__main__":
     wpilib.run(MyRobot)
